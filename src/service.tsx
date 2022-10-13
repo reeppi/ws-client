@@ -71,7 +71,7 @@ class service {
         if (  window.location.hostname == "localhost" ) 
             url= "ws://localhost:3001";
         else 
-            url= "ws://vast-falls-13808.herokuapp.com";
+            url= "wss://vast-falls-13808.herokuapp.com";
 
         this.ws=new WebSocket(url);
         this.ws.onmessage = (e:any) => {
