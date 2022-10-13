@@ -1,26 +1,29 @@
-import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { observer } from "mobx-react";
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { useParams,Navigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Main from './main';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+function App()
+{ 
+  useEffect ( () => { 
+    document.title="Minipelit";
+    }, []); 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Router>
+    <div style={{justifyContent:"center",display:"flex"}}><h2>Minipelit</h2></div>
+    <div style={{justifyContent:"center",display:"flex"}}>
+    <div className="Page">
+      <Routes>
+          <Route path='/'  element={<Main/>}  ></Route>
+      </Routes> 
     </div>
-  );
+    </div>
+   </Router>
+  )
 }
-
 export default App;
