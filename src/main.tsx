@@ -27,17 +27,11 @@ const Main = observer(() => {
         console.log("Main aukesi");
     }, []); 
 
-    useEffect ( () => { 
-        switch (service.game )
-        {
-            case "tictactoe": tictactoeRef.current?.updateGame(); break;
-        }
-    }, [service.gameMsg]); 
 
     useEffect ( () => { 
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [service.chat]); 
-
+     
     return (
     <>
     <div style={{display:"flex",justifyContent:"center"}}>{ service.time }</div>

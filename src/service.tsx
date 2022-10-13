@@ -72,7 +72,7 @@ class service {
             url= "ws://localhost:3001";
         else 
             url= "ws://vast-falls-13808.herokuapp.com";
-            
+
         this.ws=new WebSocket(url);
         this.ws.onmessage = (e:any) => {
             var data = JSON.parse(e.data);
