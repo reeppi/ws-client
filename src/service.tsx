@@ -23,6 +23,7 @@ class service {
    gameMsg:any;
    startGame:Boolean=false;
    player:number=0;
+   connected:Boolean=false;
 
    constructor() {
     makeObservable(this, {
@@ -35,6 +36,7 @@ class service {
         invites: observable,
         startGame: observable,
         msg:observable,
+        connected:observable,
         setSentInvite: action,
         setInvite:action,
         setGameMsg: action,
@@ -45,9 +47,12 @@ class service {
         setMsg: action,
         addChatMsg: action,
         setStartGame: action,
+        setLogged: action,
+        setConnected: action
    
     })
     }
+    setConnected(connected_:Boolean) { this.connected = connected_; }
     setPlayer(player_:number) { this.player = player_; }
     setStartGame(startGame_:Boolean) { this.startGame = startGame_; }
     setGame(game_:any) { this.game = game_; }
@@ -74,6 +79,13 @@ class service {
             url= "wss://vast-falls-13808.herokuapp.com";
 
         this.ws=new WebSocket(url);
+
+        this.ws.onopen = (e:any) =>
+        {
+            console.log("connected");
+            this.setConnected(true);
+        }
+
         this.ws.onmessage = (e:any) => {
             var data = JSON.parse(e.data);
             switch ( data.event )
@@ -87,7 +99,7 @@ class service {
                 case "ACCEPTINVITE" :  this.acceptInvite(data.payload.username); break;
                 case "REJECTINVITE" : this.setSentInvite(""); break;
                 case "LOGOUTOK" :this.setLogged(false); break;
-                case "USERS" :console.log(data.payload); this.setUsers(data.payload); break;
+                case "USERS" : this.setUsers(data.payload); break;
                 case "GAME" :  this.gameEvent(data);
             }     
           };
@@ -133,7 +145,6 @@ class service {
         {
             case "tictactoe": tictactoeService.event(data);
         }
-
     }
 
 

@@ -39,8 +39,7 @@ const Main = observer(() => {
     <Tictactoe ref={tictactoeRef}/>
 
     <div style={{display:"flex",justifyContent:"center"}}>{ service.msg }</div>
-    <strong>Pelaajat</strong> 
-
+    <strong>Pelaajat </strong>
     <div style={{display:"flex"}} >
     {
         service.users.map((e,index)=>
@@ -89,7 +88,7 @@ const Main = observer(() => {
         <FloatingLabel controlId="floatingInput" label="Anna nimimerkkisi" >
         <Form.Control maxLength={20} value={username} onChange={(e)=>{ setUsername(e.target.value); service.setUsername(e.target.value);  }} placeholder="Anna nimimerkkisi"/>
         </FloatingLabel>
-        <Button onClick={()=>service.login()}>Hyppää sisälle</Button>
+        <Button disabled={!service.connected} onClick={()=>service.login()}>Hyppää sisälle</Button>
         </InputGroup>
         </div>
         </>
@@ -103,23 +102,18 @@ const Main = observer(() => {
         </FloatingLabel>
         <Button variant="info" onClick={()=>{service.sendChatMessage(msg); setMsg("");}}>Lähetä</Button>
         </InputGroup>
-        
         <Button onClick={()=>service.logout()}>Hyppää pois</Button>
-        
         </>
     }
+    </>
+    )
+});
+        /*
         <InputGroup>
         <FloatingLabel controlId="floatingInput" label="JSON viesti" >
         <Form.Control value={dmsg} onChange={(e)=>{ setDmsg(e.target.value);  }} placeholder="JSON VIESTi"/>
         </FloatingLabel>
         <Button onClick={()=>service.sendmsg(dmsg)}>VIESTI</Button>
-        </InputGroup>
-
-
-
-
-    </>
-    )
-});
+        </InputGroup>*/
 
 export default Main;

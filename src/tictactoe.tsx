@@ -10,9 +10,9 @@ import { observer } from "mobx-react";
 import service from './service';
 import tictactoeService from './tictactoeService';
 
-const ROWS=10;
-const COLS=10;
-const SIZE=35;
+const ROWS=14;
+const COLS=14;
+const SIZE=25;
 
 const Tictactoe = forwardRef((props,ref) => {
     const canvasRef = useRef<HTMLCanvasElement |null>(null);
@@ -28,7 +28,7 @@ const Tictactoe = forwardRef((props,ref) => {
     useEffect(() => {
       console.log("updateBoard")
       drawBoard();
-    }, [tictactoeService.board,tictactoeService.winner])
+    }, [tictactoeService.board,tictactoeService.winner,tictactoeService.isOn])
 
     const drawBoard=()=>
     {
@@ -43,8 +43,16 @@ const Tictactoe = forwardRef((props,ref) => {
     const draw = (ctx:CanvasRenderingContext2D) =>
     {
       console.log("Draw");
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+     
+      if (!tictactoeService.isOn)
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      else
+        {
+          ctx.fillStyle ="#f7fcfc";
+          ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        }
       ctx.fillStyle = "#aaaaaa";
+
 
       for (let x=0;x<ROWS+1;x++)
       {
@@ -77,9 +85,6 @@ const Tictactoe = forwardRef((props,ref) => {
             }
           if ( tictactoeService.board[y][x] == "0")
             {
-
-              console.log("Draw 0");
-              console.log("X "+ x + " Y :"+y);
               ctx.beginPath();
               ctx.arc(x*SIZE+SIZE/2,y*SIZE+SIZE/2,SIZE/2-2,0,2*Math.PI);
               ctx.stroke();
@@ -97,7 +102,7 @@ const Tictactoe = forwardRef((props,ref) => {
       
         ctx.globalAlpha = 0.6;
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(ctx.canvas.width/2-w/2,35,w,35);
+        ctx.fillRect(ctx.canvas.width/2-w/2,SIZE,w,35);
 
         ctx.fillStyle = '#000000';
         ctx.globalAlpha = 0.7;
@@ -133,13 +138,16 @@ const Tictactoe = forwardRef((props,ref) => {
     }
 
     return <>
+      
+      <div style={{display:"flex",justifyContent:"center"}}><strong>Ristinolla</strong></div>
     <div style={{display:"flex",justifyContent:"center"}}>
-      <canvas onMouseDown={onCanvasMouseDown} onMouseUp={onCanvasMouseUp}  width="350" height="350" ref={canvasRef} />
+
+      <canvas style={{cursor:tictactoeService.isOn?"crosshair":"default"}} onMouseDown={onCanvasMouseDown} onMouseUp={onCanvasMouseUp}  width="350" height="350" ref={canvasRef} />
     </div>
       <div style={{display:"flex",justifyContent:"center"}}>{tictactoeService.msg}</div>
     </>
 })
-
-// <button onClick={()=>tictactoeService.setWinner("Huplaa")}>Winner</button>
+//    <button onClick={()=>tictactoeService.setOn(true)}>----</button>
+// 
 
 export default observer(Tictactoe)

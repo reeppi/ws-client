@@ -1,21 +1,29 @@
 
-import { makeAutoObservable } from "mobx"
+import { timingSafeEqual } from "crypto";
+import { flowResult, makeAutoObservable } from "mobx"
 import service from './service'
 
-const ROWS=10;
-const COLS=10;
+const ROWS=14;
+const COLS=14;
 
 class tictactoe_service {
     board:any[][];
     winner:String="";
     gameId:String="";
     msg:String="";
+    isOn:Boolean=false;
 
     constructor ()
     {
         this.board = Array(ROWS).fill(0).map(x => Array(COLS).fill(' '));
         makeAutoObservable(this);
     }
+
+    setOn(isOn_:Boolean)
+    {
+        this.isOn = isOn_;
+    }
+
 
     setMsg(msg_:String)
     {
@@ -36,10 +44,15 @@ class tictactoe_service {
     
     startGame(gameId_: String)
     {
-        if ( service.player == 0)
+        if ( service.player == 0){
+            this.isOn =true;
             this.setMsg("Sinun vuorosi.");
+        }
         else
+        {
+            this.isOn =false;
             this.setMsg("Vastustajan vuoro.");
+        }
         this.winner = "";
         this.gameId=gameId_;
         this.board = Array(ROWS).fill(0).map(x => Array(COLS).fill(' '));
@@ -47,7 +60,7 @@ class tictactoe_service {
 
     event(data:any)
     {
-        console.log("Event happened in tictactoe service "+data.event2);
+        console.log("Event happened tictactoe"+data.event2);
         switch(data.event2)
         {
             case "SET": 
@@ -63,14 +76,27 @@ class tictactoe_service {
                 else
                      this.setMsg("Hävisit pelin!");
                 service.setMsg("");
+                this.isOn =false;
                 this.setWinner(data.data.username);
             break;
 
             case "TURN": 
+
+            var tmp="";
+                if ( service.player==0) tmp="X";
+                if ( service.player==1) tmp="0";        
+
             if ( data.data.username == service.username )
-                this.setMsg("Sinun vuorosi.");
+            {
+                this.setOn(true);
+                this.setMsg("Sinun vuorosi. ("+tmp+") ");
+            }
             else
+            {
+                this.setOn(false);
                 this.setMsg("Vastustajan vuoro.");
+            }
+
         break;
         }
     }
