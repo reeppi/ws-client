@@ -88,7 +88,7 @@ const Main = observer(() => {
         <FloatingLabel controlId="floatingInput" label="Anna nimimerkkisi" >
         <Form.Control maxLength={20} value={username} onChange={(e)=>{ setUsername(e.target.value); service.setUsername(e.target.value);  }} placeholder="Anna nimimerkkisi"/>
         </FloatingLabel>
-        <Button disabled={!service.connected} onClick={()=>service.login()}>Hyppää sisälle</Button>
+        <Button disabled={!service.connected} onClick={()=>service.login()}>{!service.connected?"Yhdistetään...":"Hyppää sisälle!"}</Button>
         </InputGroup>
         </div>
         </>
@@ -102,7 +102,9 @@ const Main = observer(() => {
         </FloatingLabel>
         <Button variant="info" onClick={()=>{service.sendChatMessage(msg); setMsg("");}}>Lähetä</Button>
         </InputGroup>
-        <Button onClick={()=>service.logout()}>Hyppää pois</Button>
+        <div style={{paddingTop:"5px"}}>
+        <Button style={{width:"100%"}} variant="warning" onClick={()=>service.logout()}>Hyppää pois</Button>
+        </div>
         </>
     }
     </>

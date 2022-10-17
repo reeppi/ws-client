@@ -90,10 +90,10 @@ class service {
             var data = JSON.parse(e.data);
             switch ( data.event )
             {
-                case "TIME" :this.setTime(data.payload); break;
-                case "MSG" :this.setMsg(data.payload.msg); break;
+                case "TIME" : this.setTime(data.payload); break;
+                case "MSG" : this.setMsg(data.payload.msg); break;
                 case "CHAT" : this.addChatMsg(data.payload.username,data.payload.msg); break;
-                case "LOGINOK" :this.setLogged(true); break;
+                case "LOGINOK" : this.setLogged(true); break;
                 case "INVITE" : this.setInvite(data.payload.username,data.payload.game);  break; //Sait pelikutsun lisätään se invite-listaan.
                 case "CANCELINVITE" : this.deleteInvite(data.payload.username); break; //Lähettäjä ei halunnutkaan pelata kanssasi ja perui kutsun.
                 case "ACCEPTINVITE" :  this.acceptInvite(data.payload.username); break;

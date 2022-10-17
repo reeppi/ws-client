@@ -43,7 +43,8 @@ const Tictactoe = forwardRef((props,ref) => {
     const draw = (ctx:CanvasRenderingContext2D) =>
     {
       console.log("Draw");
-     
+
+
       if (!tictactoeService.isOn)
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       else
@@ -52,8 +53,7 @@ const Tictactoe = forwardRef((props,ref) => {
           ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         }
       ctx.fillStyle = "#aaaaaa";
-
-
+      
       for (let x=0;x<ROWS+1;x++)
       {
         ctx.beginPath();
