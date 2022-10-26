@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx"
 import { makeObservable, observable, action } from "mobx"
 
 import tictactoeService from "./tictactoeService";
+import foodfightService from "./foodfightService";
 
 type chatMsg = {
     username: String;
@@ -19,7 +20,7 @@ class service {
    chat:chatMsg[]=[];
    invites: any = {};
    sentInvite:String="";
-   game:String="tictactoe";
+   game:String="";
    gameMsg:any;
    startGame:Boolean=false;
    player:number=0;
@@ -118,6 +119,7 @@ class service {
         switch (this.game)
         {
             case "tictactoe": tictactoeService.startGame(this.username); break; //gameId on oma usernamesi
+            case "foodfight": foodfightService.startGame(this.username); break;
         }
     }
 
@@ -135,6 +137,7 @@ class service {
             switch (this.game)
             {
                 case "tictactoe": tictactoeService.startGame(toUsername);  break; //GameId on kutsun lähettäjän username
+                case "foodfight": foodfightService.startGame(toUsername);  break; //GameId on kutsun lähettäjän username
             }
         } 
     }
@@ -143,13 +146,15 @@ class service {
     {
         switch ( this.game )
         {
-            case "tictactoe": tictactoeService.event(data);
+            case "tictactoe": tictactoeService.event(data); break;
+            case "foodfight": foodfightService.event(data); break;
         }
     }
 
 
     sendInvite(toUsername:String,game:String) //Pelikutsun lähetys, asetetaan pelattava peli game muuttujaan
     {
+      
         console.log("send Invite to "+ toUsername);
         this.ws.send(JSON.stringify({event:"INVITE",payload:{username:toUsername,game}}));
         this.setGame(game);

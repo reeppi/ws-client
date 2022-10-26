@@ -2,11 +2,14 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Button } from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { observer } from "mobx-react";
 import service from './service';
 import Tictactoe from './tictactoe';
+import Foodfight from './foodfight';
 
 
 type handles = {
@@ -35,22 +38,40 @@ const Main = observer(() => {
     return (
     <>
     <div style={{display:"flex",justifyContent:"center"}}>{ service.time }</div>
-
-    <Tictactoe ref={tictactoeRef}/>
+    <hr/>
+    { service.game == "foodfight" && <Foodfight/> }
+    { service.game == "tictactoe" && <Tictactoe ref={tictactoeRef}/> }
+    { service.game =="" && !service.logged && 
+        <div style={{display:"flex",justifyContent:"center"}}>
+        Hyppää sisälle minipeleihin antamalla ensiksi nimimerkkisi. Tämän jälkeen
+        voit lähettää ja vastaanottaa pelikutsuja.
+        </div>} 
 
     <div style={{display:"flex",justifyContent:"center"}}>{ service.msg }</div>
+    <hr/>
     <strong>Pelaajat </strong>
+
+    {
+    Object.keys(service.users).length == 0 && <div>Ei pelaajia paikalla</div>
+    }
     <div style={{display:"flex"}} >
     {
         service.users.map((e,index)=>
         service.username == e ? 
         <div key={index}><Button disabled={true} variant="primary">{e}</Button></div>
         : 
-        <div key={index}><Button disabled={service.sentInvite != "" || !service.logged} variant="secondary" onClick={ ()=>{ service.sendInvite(e,"tictactoe"); }}>{e}</Button></div>
+            <div key={index}>         
+            <DropdownButton disabled={service.sentInvite != "" || !service.logged} id="dropdown-basic-button" title={e}>
+                <Dropdown.Item onClick={ ()=>service.sendInvite(e,"tictactoe")}>Ristinolla</Dropdown.Item>
+                <Dropdown.Item onClick={ ()=>service.sendInvite(e,"foodfight")}>Ruokarähinä</Dropdown.Item>
+            </DropdownButton>
+            </div>
         )
     }
     </div>
-    (Lähetä pelikutsu klikkaamalla pelaaja)
+    {
+    service.logged && <div>Lähetä pelikutsu valitsemalla pelaaja.</div>
+    }
     {
      Object.entries(service.invites).map(([e,ee])=>
      <div style={{paddingTop:"2px"}}>
@@ -97,14 +118,15 @@ const Main = observer(() => {
         service.logged &&
         <>
         <InputGroup>
-        <FloatingLabel controlId="floatingInput" label="Kirjoita chat viesti" >
-        <Form.Control  maxLength={100} value={msg} onChange={(e)=>{ setMsg(e.target.value); }} placeholder="Kirjoita viesti"/>
-        </FloatingLabel>
-        <Button variant="info" onClick={()=>{service.sendChatMessage(msg); setMsg("");}}>Lähetä</Button>
+            <FloatingLabel controlId="floatingInput" label="Kirjoita chat viesti" >
+            <Form.Control  maxLength={100} value={msg} onChange={(e)=>{ setMsg(e.target.value); }} placeholder="Kirjoita viesti"/>
+            </FloatingLabel>
+            <Button variant="info" onClick={()=>{service.sendChatMessage(msg); setMsg("");}}>Lähetä</Button>
         </InputGroup>
         <div style={{paddingTop:"5px"}}>
         <Button style={{width:"100%"}} variant="warning" onClick={()=>service.logout()}>Hyppää pois</Button>
         </div>
+        <div style={{display:"flex",justifyContent:"center"}}>tuomas.kokki(at)outlook.com</div>
         </>
     }
     </>
