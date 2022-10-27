@@ -9,9 +9,10 @@ Frontti tehty Reactilla käyttäen mobx-tilanhallintaa.<br/>
 Tiedonsiirto NodeJs (websocket) serverin välityksellä<br/>
 <br/>
 Ruokarähinä (lyhyt kuvaus)<br/>
--Frontissa lasketaan ravintoarvoista saadut statsit ja lähetetään backendille.<br/>
+-Ruokarähinään voi osallistua kaksi pelaaja josta kukin valitsee maximissaan 3 eri ruokaa<br/>
+-Frontissa lasketaan ravintoarvojen perusteella statsit jotka lähetetään backendille.<br/>
 -Backendi suorittaa laskutoimitukset frontilta saatujen tietojen perusteella<br/>
--Pelaajille lähetetään loki sekä muuta tietoa rähinästä. <br/>
+-Kummallekkin pelaajalle lähetetään loki rähinästä sekä muuta tietoa. <br/>
 <br/>
 Front: http://minipelit.netlify.app <br/>
 Backend (Nodejs): https://github.com/reeppi/ws<br/>

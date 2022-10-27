@@ -27,6 +27,7 @@ export interface iLog {
 }
   
 class foodfight_service {
+    loadingData:boolean = false;
     isOn:boolean=false;
     gameId: String="";
     foodArmy: iStats[] = [];  // Lähetään palvelimelle
@@ -56,24 +57,34 @@ class foodfight_service {
 
     async fetchFood(food: String)
     {
+
+        try {
+        this.data = [];
+        this.loadingData=true;
         console.log("fetching foods!!!!!! "+ food);
         var url="";
-        if (  window.location.hostname == "localhost" ) 
-            url= "http://localhost:3001";
-        else 
-            url= "https://vast-falls-13808.herokuapp.com";
+            if (  window.location.hostname == "localhost" ) 
+                url= "http://localhost:3001";
+            else 
+                url= "https://vast-falls-13808.herokuapp.com";
         
-        const response = await window.fetch(url+"/foods?q="+food);
-        if ( response.ok)
-        {
+            const response = await window.fetch(url+"/foods?q="+food);
+            if ( response.ok)
+            {
             this.data  = await response.json();
             if ( !Array.isArray(this.data))
                 this.data = [];
             console.log(this.data);
-        } else {
-            console.log("Response not valid");
-
+            } else {
+                console.log("Response not valid");
+            }
+        } catch (error:any)
+        {
+            console.log(error.message);
+        } finally {
+            this.loadingData=false;
         }
+
     }
 
     hasFoodInArmy(id:number)

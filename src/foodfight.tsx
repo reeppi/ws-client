@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import { useState, useRef, useEffect,forwardRef,useImperativeHandle } from 'react';
 import { observer } from "mobx-react";
 import service from './service';
+import Spinner from 'react-bootstrap/Spinner';
 import foodfightService, { iLog, iStats } from './foodfightService';
 
 const RND=100;
@@ -54,7 +55,6 @@ const Foodfight = forwardRef((props,ref) => {
         {
           foodfightService.foodArmy && foodfightService.foodArmy.map((e:iStats,index:number)=><div style={{paddingTop:"2px"}} key={index}><Button style={{width:"100%"}} onClick={()=>foodfightService.removeArmyUnit(index)}>{index+1}. {e.name} [Poista]</Button></div>)
         }
-
         {
          foodfightService.foodArmy.length > 0 &&
          <div style={{paddingTop:"2px"}}> 
@@ -74,11 +74,14 @@ const Foodfight = forwardRef((props,ref) => {
           foodfightService.opponentReady && <div className="center"><strong>Vastustaja odottaa sinua rähinään!!!</strong></div> 
         }
         {
-          !foodfightService.opponentReady  &&  <div className="center">Vastustaja ei ole valmis</div>
+          !foodfightService.opponentReady  &&  <div className="center">Vastustaja ei ole valmis.</div>
         }
 
         {
           foodfightService.data && foodfightService.data.filter( (e:any)=>e.type.code=="FOOD").map( (e:any)=><FoodEntry key={e.id} {...e} /> )
+        }
+        {
+          foodfightService.loadingData && <div className="center"><Spinner animation="border" variant="primary" /></div>
         }
    
 
