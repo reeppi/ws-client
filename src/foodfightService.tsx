@@ -14,6 +14,7 @@ export interface iStats {
     id: number,
     name: string,
     health: number,
+    healthF: number,
     attack: number,
     defence: number,
     delay: number

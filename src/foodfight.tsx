@@ -2,10 +2,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Button } from 'react-bootstrap';
-
-import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-import { useSearchParams, useNavigate } from "react-router-dom";
-import React, { useState, useRef, useEffect,forwardRef,useImperativeHandle } from 'react';
+import { useState, useRef, useEffect,forwardRef,useImperativeHandle } from 'react';
 import { observer } from "mobx-react";
 import service from './service';
 import foodfightService, { iLog, iStats } from './foodfightService';
@@ -53,7 +50,7 @@ const Foodfight = forwardRef((props,ref) => {
           foodfightService.data && foodfightService.data.length == 0 && <div>Haulla ei löytynyt ruokaa.</div>
         }
         <a href="http://www.fineli.fi">Finelin</a> apia käytetään elintarviketietojen hakemiseen.
-        <div><strong>Ruoka jengi (valitse max eri 3 ruokaa)</strong></div>
+        <div><strong>Ruokajengi (valitse max 3 eri ruokaa)</strong></div>
         {
           foodfightService.foodArmy && foodfightService.foodArmy.map((e:iStats,index:number)=><div style={{paddingTop:"2px"}} key={index}><Button style={{width:"100%"}} onClick={()=>foodfightService.removeArmyUnit(index)}>{index+1}. {e.name} [Poista]</Button></div>)
         }
@@ -115,15 +112,18 @@ const Foodfight = forwardRef((props,ref) => {
           foodfightService.winner != "" && foodfightService.oppArmy &&
           <>
             <strong>Vastustajan jengi</strong>
+
+            <ul style={{display:"InlineBlock"}}>
               {
                 foodfightService.oppArmy.map((e:iStats,index:number)=>
                 {
                 if ( e.health < 0 )
-                  return <li key={index}>{e.name} (tuupertui)</li>
+                  return <li key={index}><div style={{color:"maroon"}}>{e.name} ({Math.max(Math.round(e.health*10),0)/10}/{Math.round(e.healthF*10)/10}) - <strong>tuupertui</strong></div> <Stats stats={e}/></li>
                 else 
-                  return <li key={index}>{e.name}</li>
+                return <li key={index}><div style={{color:"DarkGreen"}}>{e.name} ({Math.round(e.health*10)/10}/{Math.round(e.healthF*10)/10})</div> <Stats stats={e}/></li>
                 })
               }
+              </ul>
           </>
         }
 
@@ -131,21 +131,28 @@ const Foodfight = forwardRef((props,ref) => {
           foodfightService.winner != "" && foodfightService.army &&
           <>
             <strong>Oma jengisi</strong>
+            <ul style={{display:"InlineBlock"}}>
               {
                 foodfightService.army.map((e:iStats,index:number)=>
                 {
                 if ( e.health < 0 )
-                  return <li key={index}>{e.name} (tuupertui)</li>
+                  return <li key={index}><div style={{color:"maroon"}}>{e.name} ({Math.max(Math.round(e.health*10),0)/10}/{Math.round(e.healthF*10)/10}) - <strong>tuupertui</strong></div> <Stats stats={e}/></li>
                 else 
-                  return <li key={index}>{e.name}</li>
+                  return <li key={index}><div style={{color:"DarkGreen"}}>{e.name} ({Math.round(e.health*10)/10}/{Math.round(e.healthF*10)/10})</div> <Stats stats={e}/></li>
                 })
               }
+            </ul>
           </>
         }
 
         </div>
     </>
 })
+
+const Stats = ({stats}:{stats:iStats}) => 
+{
+return <ul style={{paddingLeft: "0", listStyle:"none"}}><li><i>Hyökkäys:{stats.attack} Puolustus:{stats.defence} Hitaus:{stats.delay}</i></li></ul>
+}
 
 export default observer(Foodfight)
 
@@ -156,12 +163,11 @@ const FoodEntry = (props:any) => {
     id: props.id,
     name: props.name.fi,
     health: Math.round(props.energyKcal*RND)/RND,
+    healthF: Math.round(props.energyKcal*RND)/RND,
     attack: Math.round(props.carbohydrate*RND)/RND,
     defence: Math.round(props.protein*RND)/RND,
     delay: Math.round((props.fat+props.carbohydrate+props.protein)*RND)/RND
   } 
-
-
 
   return <>
     <li><a href={`https://fineli.fi/fineli/api/v1/foods/${stats.id}`} target="_blank"> {stats.id }</a>.  {stats.name}
