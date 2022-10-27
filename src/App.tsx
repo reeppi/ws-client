@@ -15,13 +15,13 @@ function App()
 
   return (
     <Router>
-    <div style={{justifyContent:"center",display:"flex"}}><h2>Minipelit</h2></div>
-    <div style={{justifyContent:"center",display:"flex"}}>
-    <div className="Page">
-      <Routes>
-          <Route path='/'  element={<Main/>}  ></Route>
+    <div className="center"><h2>Minipelit</h2></div>
+    <div className="center">
+      <div className="Page">
+        <Routes>
+          <Route path='/' element={<Main/>}  ></Route>
       </Routes> 
-    </div>
+      </div>
     </div>
    </Router>
   )

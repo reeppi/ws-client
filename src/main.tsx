@@ -37,17 +37,17 @@ const Main = observer(() => {
      
     return (
     <>
-    <div style={{display:"flex",justifyContent:"center"}}>{ service.time }</div>
+    <div className="center">{ service.time }</div>
     <hr/>
     { service.game == "foodfight" && <Foodfight/> }
     { service.game == "tictactoe" && <Tictactoe ref={tictactoeRef}/> }
     { service.game =="" && !service.logged && 
-        <div style={{display:"flex",justifyContent:"center"}}>
+        <div className="center">
         Hyppää sisälle minipeleihin antamalla ensiksi nimimerkkisi. Tämän jälkeen
         voit lähettää ja vastaanottaa pelikutsuja.
         </div>} 
 
-    <div style={{display:"flex",justifyContent:"center"}}>{ service.msg }</div>
+    <div className="center">{ service.msg }</div>
     <hr/>
     <strong>Pelaajat </strong>
 
@@ -106,10 +106,10 @@ const Main = observer(() => {
         <>
         <div style={{paddingTop:"2px"}}>
         <InputGroup>
-        <FloatingLabel controlId="floatingInput" label="Anna nimimerkkisi" >
-        <Form.Control maxLength={20} value={username} onChange={(e)=>{ setUsername(e.target.value); service.setUsername(e.target.value);  }} placeholder="Anna nimimerkkisi"/>
-        </FloatingLabel>
-        <Button disabled={!service.connected} onClick={()=>service.login()}>{!service.connected?"Yhdistetään...":"Hyppää sisälle!"}</Button>
+            <FloatingLabel controlId="floatingInput" label="Anna nimimerkkisi" >
+            <Form.Control maxLength={20} value={username} onChange={(e)=>{ setUsername(e.target.value); service.setUsername(e.target.value);  }} placeholder="Anna nimimerkkisi"/>
+            </FloatingLabel>
+            <Button disabled={!service.connected} onClick={()=>service.login()}>{!service.connected?"Yhdistetään...":"Hyppää sisälle!"}</Button>
         </InputGroup>
         </div>
         </>
@@ -126,7 +126,7 @@ const Main = observer(() => {
         <div style={{paddingTop:"5px"}}>
         <Button style={{width:"100%"}} variant="warning" onClick={()=>service.logout()}>Hyppää pois</Button>
         </div>
-        <div style={{display:"flex",justifyContent:"center"}}>tuomas.kokki(at)outlook.com</div>
+        <div className="center">tuomas.kokki(at)outlook.com</div>
         </>
     }
     </>

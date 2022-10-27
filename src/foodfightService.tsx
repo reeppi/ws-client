@@ -28,7 +28,9 @@ export interface iLog {
 class foodfight_service {
     isOn:boolean=false;
     gameId: String="";
-    foodArmy: iStats[] = [];
+    foodArmy: iStats[] = [];  // Lähetään palvelimelle
+    oppArmy:iStats[] = []; //Resultteja varten
+    army:iStats[]=[]; // Resultteja varten
     data: any[]|null=null; //Finelistä haettavat
     log: iLog[]=[];
     winner: string="";
@@ -96,6 +98,8 @@ class foodfight_service {
     {
         if ( this.isOn)
         {
+            this.oppArmy=[];
+            this.army=[];
             this.data=null;
             this.log= [];
             this.winner="";
@@ -131,7 +135,8 @@ class foodfight_service {
                 this.log = data.data.log;
                 this.winner = data.data.winner;
                 this.score = data.data.score;
-                console.log(data.data.log);
+                this.oppArmy = data.data.oppArmy;
+                this.army = data.data.army;
                 break;
             case "IAMREADY":
                 console.log("opponent ready")
@@ -155,6 +160,8 @@ class foodfight_service {
         this.log=[];
         this.data=null;
         this.score="";
+        this.oppArmy=[];
+        this.army=[];
     }   
 }
 

@@ -3,7 +3,7 @@
 Harjoitustyönä tehty minipelit sivu<br/>
 Pelejä tällä hetkellä<br/>
 -ristinolla <br/>
--solidabiksen koodihaaste =)<br/>
+-ruokarähinä (solidabiksen koodihaaste)<br/>
 Frontti tehty Reactilla käyttäen mobx-tilanhallintaa.<br/>
 Tiedonsiirto NodeJs (websocket) serverin välityksellä<br/>
 <br/>

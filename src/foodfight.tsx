@@ -11,10 +11,9 @@ import service from './service';
 import foodfightService, { iLog, iStats } from './foodfightService';
 
 const RND=100;
-// Health  = props.energyKcal   = Health Points eli kestopisteet.
-// Attack  = props.carbohydrate = Hyökkäysvoima
-// Defence = props.protein     = Puolustusvoima (voidaan käyttää esim. prosentuaalisesti, koska maksimi on tietty 100)
-// props.fat
+// Health  = energyKcal   = Health Points eli kestopisteet.
+// Attack  = carbohydrate = Hyökkäysvoima
+// Defence = protein     = Puolustusvoima (voidaan käyttää esim. prosentuaalisesti, koska maksimi on tietty 100)
 // Delay = Hiilarit + proteiini + rasva
 
 const Foodfight = forwardRef((props,ref) => {
@@ -25,6 +24,7 @@ const Foodfight = forwardRef((props,ref) => {
     useImperativeHandle(ref, () => ({
       updateGame: () => {
          // console.log("Update foodfight!");
+         // Tälle ei käyttöä mutta annetaan olla.
       },
     }));
 
@@ -38,8 +38,8 @@ const Foodfight = forwardRef((props,ref) => {
     }, [foodfightService.foodArmy]); 
 
     return <>
-      <div style={{display:"flex",justifyContent:"center"}}><strong>Ruokarähinä </strong></div>
-      <div style={{display:"flex",justifyContent:"center"}}><a href="https://koodihaaste.solidabis.com/" target="_blank"> koodihaaste.solidabis.com</a></div>
+      <div className="center"><strong>Ruokarähinä </strong></div>
+      <div className="center"><a href="https://koodihaaste.solidabis.com/" target="_blank"> koodihaaste.solidabis.com</a></div>
       Luo ruokajengisi elintarvikkeista!
         <div style={{paddingTop:"2px"}}>
         <InputGroup>
@@ -55,7 +55,7 @@ const Foodfight = forwardRef((props,ref) => {
         <a href="http://www.fineli.fi">Finelin</a> apia käytetään elintarviketietojen hakemiseen.
         <div><strong>Ruoka jengi (valitse max eri 3 ruokaa)</strong></div>
         {
-          foodfightService.foodArmy && foodfightService.foodArmy.map((e:iStats,index:number)=><div style={{paddingTop:"2px"}} key={index}><Button style={{width:"100%"}} onClick={()=>foodfightService.removeArmyUnit(index)}>{index+1}. {e.name} [×]</Button></div>)
+          foodfightService.foodArmy && foodfightService.foodArmy.map((e:iStats,index:number)=><div style={{paddingTop:"2px"}} key={index}><Button style={{width:"100%"}} onClick={()=>foodfightService.removeArmyUnit(index)}>{index+1}. {e.name} [Poista]</Button></div>)
         }
 
         {
@@ -74,10 +74,10 @@ const Foodfight = forwardRef((props,ref) => {
         }
 
         {
-          foodfightService.opponentReady && <div style={{display:"flex",justifyContent:"center"}}><strong>Vastustaja odottaa sinua rähinään!!!</strong></div> 
+          foodfightService.opponentReady && <div className="center"><strong>Vastustaja odottaa sinua rähinään!!!</strong></div> 
         }
         {
-          !foodfightService.opponentReady  &&  <div style={{display:"flex",justifyContent:"center"}}>Vastustaja ei ole valmis</div>
+          !foodfightService.opponentReady  &&  <div className="center">Vastustaja ei ole valmis</div>
         }
 
         {
@@ -106,10 +106,43 @@ const Foodfight = forwardRef((props,ref) => {
         {
           foodfightService.winner !="" && 
           <>
-            { foodfightService.winner == service.username && <div style={{display:"flex",justifyContent:"center"}}><strong>Jengisi voitti rähinän! { foodfightService.score }</strong></div> }
-            { foodfightService.winner != service.username && <div style={{display:"flex",justifyContent:"center"}}><strong>Jengisi hävisi rähinän! { foodfightService.score }</strong></div> }
+            { foodfightService.winner == service.username && <div className="center"><strong>Jengisi voitti rähinän! { foodfightService.score }</strong></div> }
+            { foodfightService.winner != service.username && <div className="center"><strong>Jengisi hävisi rähinän! { foodfightService.score }</strong></div> }
          </>
         }
+
+        {
+          foodfightService.winner != "" && foodfightService.oppArmy &&
+          <>
+            <strong>Vastustajan jengi</strong>
+              {
+                foodfightService.oppArmy.map((e:iStats,index:number)=>
+                {
+                if ( e.health < 0 )
+                  return <li key={index}>{e.name} (tuupertui)</li>
+                else 
+                  return <li key={index}>{e.name}</li>
+                })
+              }
+          </>
+        }
+
+        {
+          foodfightService.winner != "" && foodfightService.army &&
+          <>
+            <strong>Oma jengisi</strong>
+              {
+                foodfightService.army.map((e:iStats,index:number)=>
+                {
+                if ( e.health < 0 )
+                  return <li key={index}>{e.name} (tuupertui)</li>
+                else 
+                  return <li key={index}>{e.name}</li>
+                })
+              }
+          </>
+        }
+
         </div>
     </>
 })
@@ -147,11 +180,12 @@ const FoodEntry = (props:any) => {
           
           Puolustus : {stats.defence}, Hitaus: {stats.delay}s </li>
             {
-            <Button onClick={()=>foodfightService.addToArmy(stats)}>Lisää ruoka jengiisi</Button>
+            !foodfightService.hasFoodInArmy(stats.id) && <Button onClick={()=>foodfightService.addToArmy(stats)}>Lisää ruoka jengiisi</Button>
             }
         </ul>
     </li>
   </>
 }
+//<Button onClick={()=>foodfightService.addToArmy(stats)}>Lisää ruoka jengiisi</Button>
 //!foodfightService.hasFoodInArmy(stats.id) && <Button onClick={()=>foodfightService.addToArmy(stats)}>Lisää ruoka jengiisi</Button>
 
