@@ -42,10 +42,16 @@ const Foodfight = forwardRef((props,ref) => {
         <div style={{paddingTop:"2px"}}>
         <InputGroup>
         <FloatingLabel controlId="floatingInput" label="Hae jengiisi elintarvike" >
-        <Form.Control maxLength={20} value={foodInput} onChange={(e)=>{ setFoodInput(e.target.value);}} placeholder=""/>
+        <Form.Control maxLength={20} value={foodInput} 
+          onKeyPress={e => {
+            if (e.code=="Enter")
+              foodfightService.fetchFood(foodInput)
+           } } 
+          onChange={(e)=>{ setFoodInput(e.target.value);}} placeholder=""/>
         </FloatingLabel>
         <Button variant="warning" onClick={()=>{ setFoodInput(""); foodfightService.clearData(); }}>Tyhjennä</Button>
-        <Button onClick={()=>foodfightService.fetchFood(foodInput)}>Hae ruokaa</Button>
+        <Button 
+        onClick={()=>foodfightService.fetchFood(foodInput)}> Hae </Button>
         </InputGroup>
         {
           foodfightService.data && foodfightService.data.length == 0 && <div>Haulla ei löytynyt ruokaa.</div>
@@ -78,7 +84,7 @@ const Foodfight = forwardRef((props,ref) => {
         }
 
         {
-          foodfightService.data && foodfightService.data.filter( (e:any)=>e.type.code=="FOOD").map( (e:any)=><FoodEntry key={e.id} {...e} /> )
+          foodfightService.data && foodfightService.data.filter( (e:any)=>e.type.code=="FOOD").map( (e:any)=><FoodEntry key={e.id} {...e}/> )
         }
         {
           foodfightService.loadingData && <div className="center"><Spinner animation="border" variant="primary" /></div>
@@ -99,7 +105,7 @@ const Foodfight = forwardRef((props,ref) => {
             )
             }
             </ul>
-          <div ref={messagesEndRef} />
+          <div ref={messagesEndRef}/>
           </div>
         }
 
@@ -123,7 +129,7 @@ const Foodfight = forwardRef((props,ref) => {
                 if ( e.health < 0 )
                   return <li key={index}><div style={{color:"maroon"}}>{e.name} ({Math.max(Math.round(e.health*10),0)/10}/{Math.round(e.healthF*10)/10}) - <strong>tuupertui</strong></div> <Stats stats={e}/></li>
                 else 
-                return <li key={index}><div style={{color:"DarkGreen"}}>{e.name} ({Math.round(e.health*10)/10}/{Math.round(e.healthF*10)/10})</div> <Stats stats={e}/></li>
+                  return <li key={index}><div style={{color:"DarkGreen"}}>{e.name} ({Math.round(e.health*10)/10}/{Math.round(e.healthF*10)/10})</div> <Stats stats={e}/></li>
                 })
               }
               </ul>
@@ -161,6 +167,7 @@ export default observer(Foodfight)
 
 
 const FoodEntry = (props:any) => {
+
 
   let stats:iStats ={
     id: props.id,
