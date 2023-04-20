@@ -77,7 +77,7 @@ class service {
         if (  window.location.hostname == "localhost" ) 
             url= "ws://localhost:3001";
         else 
-            url= "wss://vast-falls-13808.herokuapp.com";
+            url= "wss://minipelit-backend.fly.dev";
 
         this.ws=new WebSocket(url);
 

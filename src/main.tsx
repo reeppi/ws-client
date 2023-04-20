@@ -46,7 +46,6 @@ const Main = observer(() => {
         Hyppää sisälle minipeleihin antamalla ensiksi nimimerkkisi. Tämän jälkeen
         voit lähettää ja vastaanottaa pelikutsuja.<br/>
         <br/>
-        Minipelit eivät tällä hetkellä ole toiminnassa.
         </div>} 
 
     <div className="center">{ service.msg }</div>
