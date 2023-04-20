@@ -66,7 +66,7 @@ class foodfight_service {
             if (  window.location.hostname == "localhost" ) 
                 url= "http://localhost:3001";
             else 
-                url= "https://vast-falls-13808.herokuapp.com";
+                url= "https://minipelit-backend.fly.dev";
         
             const response = await window.fetch(url+"/foods?q="+food);
             if ( response.ok)
